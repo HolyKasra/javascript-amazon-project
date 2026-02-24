@@ -1,4 +1,4 @@
-import { cart, addToCart } from "../data/cart.js";
+import { cart, addToCart, showAddedToCartMessage } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utility/money.js";
 let productsHTML = "";
@@ -44,7 +44,7 @@ products.forEach((product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart js-added-to-cart-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -81,7 +81,7 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
 
     // add item with arbitrary quantity to the cart
     // update cart's items quantity
-
+    showAddedToCartMessage(productId, 1000);
     addToCart(cart, productId, itemQuantity);
     updateCartQuantity(cart);
   });

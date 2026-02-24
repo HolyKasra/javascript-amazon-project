@@ -38,3 +38,14 @@ export function deleteFromCart(cart, productId) {
   }
   saveToStorage(cart);
 }
+
+export function showAddedToCartMessage(productId, delayMilliseconds) {
+  const addToCartMessage = document.querySelector(
+    `.js-added-to-cart-${productId}`,
+  );
+
+  addToCartMessage.classList.add("message-is-visible");
+  setTimeout(() => {
+    addToCartMessage.classList.remove("message-is-visible");
+  }, delayMilliseconds);
+}
