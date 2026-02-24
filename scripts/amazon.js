@@ -1,4 +1,4 @@
-import { cart } from "../data/cart.js";
+import { cart, addToCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 
 let productsHTML = "";
@@ -70,22 +70,10 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
 
     let itemQuantity = Number(selectMenuElem.value);
 
-    let found = false;
-    cart.forEach((item) => {
-      if (item.productId === productId) {
-        item.quantity += itemQuantity;
-        found = true;
-      }
-    });
-
-    if (!found) {
-      cart.push({
-        productId: productId,
-        quantity: itemQuantity,
-      });
-    }
     // We define cartQuantity inside of eventListener;
     // By this, it refereshes every time "User" pressses <Add to Cart>
+
+    addToCart(cart, productId, itemQuantity);
 
     let cartQuantity = 0;
     cart.forEach((item) => {
