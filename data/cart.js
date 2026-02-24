@@ -1,4 +1,4 @@
-export const cart = [
+export let cart = [
   {
     productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
     quantity: 2,
@@ -23,5 +23,12 @@ export function addToCart(cart, productId, itemQuantity) {
       productId: productId,
       quantity: itemQuantity,
     });
+  }
+}
+
+export function deleteFromCart(cart, productId) {
+  const index = cart.findIndex((cartItem) => cartItem.productId === productId);
+  if (index !== -1) {
+    cart.splice(index, 1);
   }
 }
