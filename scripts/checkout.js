@@ -1,5 +1,6 @@
 import { cart } from "../data/cart.js";
 import { products } from "../data/products.js";
+import { formatCurrency } from "./utility/money.js";
 
 let cartSummaryHTML = "";
 cart.forEach((cartItem) => {
@@ -22,7 +23,7 @@ cart.forEach((cartItem) => {
         <div class="product-name">
             ${matchingProduct.name}
         </div>
-        <div class="product-price">$${(matchingProduct.priceCents / 100).toFixed(2)}</div>
+        <div class="product-price">$${formatCurrency(matchingProduct.priceCents)}</div>
         <div class="product-quantity">
             <span> Quantity: <span class="quantity-label">${cartItem.quantity}</span> </span>
             <span class="update-quantity-link link-primary">
@@ -77,6 +78,5 @@ cart.forEach((cartItem) => {
     </div>
   `;
 });
-console.log(cartSummaryHTML);
 const orderSummaryElem = document.querySelector(".js-order-summary");
 orderSummaryElem.innerHTML = cartSummaryHTML;
