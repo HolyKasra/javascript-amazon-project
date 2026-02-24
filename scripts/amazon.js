@@ -60,6 +60,15 @@ products.forEach((product) => {
 
 document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
+function updateCartQuantity(cart) {
+  let cartQuantity = 0;
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+
+  document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+}
+
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
     const productId = button.dataset.productId;
@@ -70,16 +79,10 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
 
     let itemQuantity = Number(selectMenuElem.value);
 
-    // We define cartQuantity inside of eventListener;
-    // By this, it refereshes every time "User" pressses <Add to Cart>
+    // add item with arbitrary quantity to the cart
+    // update cart's items quantity
 
     addToCart(cart, productId, itemQuantity);
-
-    let cartQuantity = 0;
-    cart.forEach((item) => {
-      cartQuantity += item.quantity;
-    });
-
-    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+    updateCartQuantity(cart);
   });
 });
