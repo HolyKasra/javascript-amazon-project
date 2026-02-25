@@ -60,4 +60,6 @@ export function updateCartQuantity(cart, className) {
   });
   cartQuantity = cartQuantity === 0 ? "" : cartQuantity;
   document.querySelector(`${className}`).innerHTML = cartQuantity;
+
+  saveToStorage(cart);
 }
