@@ -3,19 +3,15 @@ import { products } from "../data/products.js";
 import { formatCurrency } from "./utility/money.js";
 
 updateCartQuantity(cart, ".js-return-to-home-link");
+renderPageHTML();
 
-let cartSummaryHTML = "";
-cart.forEach((cartItem, index) => {
-  const productID = cartItem.productId;
+function renderPageHTML() {
+  let cartSummaryHTML = "";
+  cart.forEach((cartItem, index) => {
+    const productId = cartItem.productId;
+    const matchingProduct = products.find((item) => item.id === productId);
 
-  let matchingProduct;
-  products.forEach((product) => {
-    if (product.id === productID) {
-      matchingProduct = product;
-    }
-  });
-
-  cartSummaryHTML += `
+    cartSummaryHTML += `
     <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
     <div class="delivery-date">Delivery date: Tuesday, June 21</div>
 
@@ -94,10 +90,11 @@ cart.forEach((cartItem, index) => {
     </div>
     </div>
   `;
-});
+  });
 
-const orderSummaryElem = document.querySelector(".js-order-summary");
-orderSummaryElem.innerHTML = cartSummaryHTML;
+  const orderSummaryElem = document.querySelector(".js-order-summary");
+  orderSummaryElem.innerHTML = cartSummaryHTML;
+}
 
 function getItemContainer(productId) {
   return document.querySelector(`.js-cart-item-container-${productId}`);
@@ -107,57 +104,64 @@ function getQuantityInput(productId) {
   return document.querySelector(`.js-quantity-input-${productId}`);
 }
 
-function getQuantityLabel(productId) {
+function getQuantityLabelElement(productId) {
   return document.querySelector(`.js-quantity-label-${productId}`);
 }
 
+// Delete Logic
 document.querySelectorAll(".js-delete-link").forEach((link) => {
   link.addEventListener("click", () => {
     const productId = link.dataset.productId;
     deleteFromCart(cart, productId);
 
-    // Removing item container in case we press "Delete" link.
     const itemContainer = getItemContainer(productId);
     itemContainer.remove();
 
-    // updating cartQuantity based on className
     updateCartQuantity(cart, ".js-return-to-home-link");
   });
 });
 
+// Update Logic
 document.querySelectorAll(".js-update-quantity-link").forEach((link) => {
   link.addEventListener("click", () => {
-    const productId = link.dataset.productId;
+    const { productId } = link.dataset;
     const itemContainer = getItemContainer(productId);
     itemContainer.classList.add("is-editing-quantity");
   });
 });
 
+// Save Logic
 document.querySelectorAll(".js-save-quantity-link").forEach((link) => {
   link.addEventListener("click", () => {
-    const productId = link.dataset.productId;
-
-    const quantityInputElem = getQuantityInput(productId);
+    const { productId } = link.dataset;
+    const updatedInputQuantity = getQuantityInput(productId);
     const itemContainer = getItemContainer(productId);
-    const quantityLabelElem = getQuantityLabel(productId);
-    const newValue = Number(quantityInputElem.value);
+    const quantityLabelElem = getQuantityLabelElement(productId);
+    const newValue = Number(updatedInputQuantity.value);
 
-    if (newValue <= 0) {
+    if (newValue < 0) {
+      const cartItem = cart.find(
+        (cartItem) => cartItem.productId === productId,
+      );
+
+      updatedInputQuantity.value = cartItem.quantity;
       alert("Value must be greater than zero!");
       itemContainer.classList.remove("is-editing-quantity");
-      return;
+
+      // Zero Quantity Special Case
     } else if (newValue === 0) {
+      deleteFromCart(cart, productId);
+      updateCartQuantity(cart, ".js-return-to-home-link");
       itemContainer.remove();
-      return;
+    } else {
+      const cartItem = cart.find((item) => item.productId === productId);
+      cartItem.quantity = Number(newValue);
+
+      quantityLabelElem.innerHTML = Number(newValue);
+      itemContainer.classList.remove("is-editing-quantity");
+
+      // saveToStorage(cart);
+      updateCartQuantity(cart, ".js-return-to-home-link");
     }
-
-    const cartItem = cart.find((item) => item.productId === productId);
-    cartItem.quantity = Number(newValue);
-
-    quantityLabelElem.innerHTML = Number(newValue);
-    itemContainer.classList.remove("is-editing-quantity");
-
-    // saveToStorage(cart);
-    updateCartQuantity(cart, ".js-return-to-home-link");
   });
 });
