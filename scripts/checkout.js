@@ -142,12 +142,9 @@ document.querySelectorAll(".js-save-quantity-link").forEach((link) => {
     const quantityLabelElem = getQuantityLabel(productId);
     const newValue = Number(quantityInputElem.value);
 
-    if (newValue < 0) {
-      alert("Enter Valid Value!");
+    if (newValue <= 0) {
+      alert("Value must be greater than zero!");
       itemContainer.classList.remove("is-editing-quantity");
-      return;
-    } else if (newValue === 0) {
-      itemContainer.remove();
       return;
     }
 
