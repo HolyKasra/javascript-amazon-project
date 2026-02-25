@@ -148,6 +148,7 @@ document.querySelectorAll(".js-save-quantity-link").forEach((link) => {
       return;
     } else if (newValue === 0) {
       itemContainer.remove();
+      updateCartQuantity(cart, ".js-return-to-home-link");
       return;
     }
 
