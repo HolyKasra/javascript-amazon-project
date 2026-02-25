@@ -39,6 +39,8 @@ export function deleteFromCart(cart, productId) {
   saveToStorage(cart);
 }
 
+// showing "Added {checkmark}" message whenever the "Add to chart"
+// button is pressed
 export function showAddedToCartMessage(productId, delayMilliseconds) {
   const addToCartMessage = document.querySelector(
     `.js-added-to-cart-${productId}`,
@@ -48,4 +50,14 @@ export function showAddedToCartMessage(productId, delayMilliseconds) {
   setTimeout(() => {
     addToCartMessage.classList.remove("message-is-visible");
   }, delayMilliseconds);
+}
+
+// function to always to keep the cartQuantity updated.
+export function updateCartQuantity(cart, className) {
+  let cartQuantity = 0;
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+  cartQuantity = cartQuantity === 0 ? "" : cartQuantity;
+  document.querySelector(`${className}`).innerHTML = cartQuantity;
 }

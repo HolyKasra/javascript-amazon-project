@@ -1,8 +1,8 @@
-import { cart, deleteFromCart } from "../data/cart.js";
+import { cart, deleteFromCart, updateCartQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utility/money.js";
 
-updateCartQuantity(cart);
+updateCartQuantity(cart, ".js-return-to-home-link");
 
 let cartSummaryHTML = "";
 cart.forEach((cartItem, index) => {
@@ -89,27 +89,18 @@ cart.forEach((cartItem, index) => {
 const orderSummaryElem = document.querySelector(".js-order-summary");
 orderSummaryElem.innerHTML = cartSummaryHTML;
 
-function updateCartQuantity(cart) {
-  let cartQuantity = 0;
-  cart.forEach((cartItem) => {
-    cartQuantity += cartItem.quantity;
-  });
-
-  // If nothing is in the cart, then we should see nothing.
-  cartQuantity = cartQuantity === 0 ? "" : cartQuantity;
-
-  document.querySelector(".js-return-to-home-link").innerHTML = cartQuantity;
-}
-
 document.querySelectorAll(".js-delete-link").forEach((link) => {
   link.addEventListener("click", () => {
     const productId = link.dataset.productId;
     deleteFromCart(cart, productId);
 
+    // Removing item container in case we press "Delete" link.
     const container = document.querySelector(
       `.js-cart-item-container-${productId}`,
     );
     container.remove();
-    updateCartQuantity(cart);
+
+    // updating cartQuantity based on className 
+    updateCartQuantity(cart, ".js-return-to-home-link");
   });
 });
