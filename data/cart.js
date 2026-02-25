@@ -53,11 +53,12 @@ export function showAddedToCartMessage(productId, delayMilliseconds) {
 }
 
 // function to always to keep the cartQuantity updated.
-export function updateCartQuantity(cart, className) {
-  let cartQuantity = 0;
-  cart.forEach((cartItem) => {
-    cartQuantity += cartItem.quantity;
-  });
+export function updateCartQuantity(cart, className = undefined) {
+  let cartQuantity;
+  cartQuantity = cart.reduce((accumulator, cartItem) => {
+    return accumulator + cartItem.quantity;
+  }, 0);
+
   cartQuantity = cartQuantity === 0 ? "" : cartQuantity;
   document.querySelector(`${className}`).innerHTML = cartQuantity;
 
