@@ -146,6 +146,9 @@ document.querySelectorAll(".js-save-quantity-link").forEach((link) => {
       alert("Value must be greater than zero!");
       itemContainer.classList.remove("is-editing-quantity");
       return;
+    } else if (newValue === 0) {
+      itemContainer.remove();
+      return;
     }
 
     const cartItem = cart.find((item) => item.productId === productId);
